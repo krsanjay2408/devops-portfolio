@@ -22,14 +22,12 @@ jobs:
 
       - name: Deploy Website to EC2
         run: |
-          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "
-            sudo mkdir -p /var/www/html
-          "
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "mkdir -p /tmp/portfolio"
 
-          scp -r ../../* \
+          scp -i ~/.ssh/id_rsa -r ./* \
           ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/tmp/portfolio
 
-          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "
             sudo cp -r /tmp/portfolio/* /var/www/html/
             sudo systemctl restart nginx
           "
